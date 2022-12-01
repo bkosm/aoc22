@@ -15,8 +15,8 @@ fun main() {
         return map.values
     }
 
-    fun do1(map: Collection<Int>) = map.max()
-    fun do2(map: Collection<Int>) = map.sortedDescending().slice(0..2).sum()
+    fun do1(arg: Collection<Int>) = arg.max()
+    fun do2(arg: Collection<Int>) = arg.sortedDescending().slice(0..2).sum()
 
     mapInput(readInput("Day01_test")).let {
         do1(it).check { this == 24000 }
