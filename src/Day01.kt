@@ -1,5 +1,5 @@
 fun main() {
-    fun doIt(input: List<String>): Int {
+    fun mapInput(input: List<String>): MutableMap<Int, Int> {
         var elf = 1
         val map = mutableMapOf(elf to 0)
 
@@ -12,15 +12,19 @@ fun main() {
             }
         }
 
-        return map.maxOf { it.value }
+        return map
     }
 
-    val testInput = readInput("Day01_test")
-    val realInput = readInput("Day01")
+    fun do1(map: Map<Int, Int>) = map.maxOf { it.value }
+    fun do2(map: Map<Int, Int>) = map.values.sortedDescending().slice(0..2).sum()
 
-    doIt(testInput).let {
-        check(it == 24000) { "Actual: $it" }
+    with(mapInput(readInput("Day01_test"))) {
+        do1(this).check { this == 24000 }
+        do2(this).check { this == 45000 }
     }
 
-    println(doIt(realInput))
+    with(mapInput(readInput("Day01"))) {
+        println(do1(this))
+        println(do2(this))
+    }
 }
