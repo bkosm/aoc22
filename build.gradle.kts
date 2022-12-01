@@ -4,6 +4,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://jitpack.io")}
 }
 
 tasks {
@@ -16,4 +17,8 @@ tasks {
     wrapper {
         gradleVersion = "7.6"
     }
+}
+
+dependencies {
+    implementation("com.github.bkosm:ktuple:1.2.0")
 }
