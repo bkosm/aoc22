@@ -12,12 +12,15 @@ fun main() {
             }
         }
 
-        return map.maxBy { it.value }.key
+        return map.maxOf { it.value }
     }
 
     val testInput = readInput("Day01_test")
     val realInput = readInput("Day01")
 
-    check(doIt(testInput) == 4)
+    doIt(testInput).let {
+        check(it == 24000) { "Actual: $it" }
+    }
+
     println(doIt(realInput))
 }
