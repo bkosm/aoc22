@@ -1,17 +1,23 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    fun doIt(input: List<String>): Int {
+        var elf = 1
+        val map = mutableMapOf(elf to 0)
+
+        input.forEach {
+            if (it.isBlank()) {
+                elf++
+                map[elf] = 0
+            } else {
+                map[elf] = map[elf]!! + it.toInt()
+            }
+        }
+
+        return map.maxBy { it.value }.key
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
-    }
-
-    // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
+    val realInput = readInput("Day01")
 
-    val input = readInput("Day01")
-    println(part1(input))
-    println(part2(input))
+    check(doIt(testInput) == 4)
+    println(doIt(realInput))
 }
