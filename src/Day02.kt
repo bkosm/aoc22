@@ -42,10 +42,10 @@ fun main() {
 
     fun do2(arg: Collection<Pair<Shape, Shape>>) = arg.sumOf { (opponent, mine) ->
         val adjustedPick = when (mine) {
-            Rock -> beatsMapping[opponent]!!
-            Paper -> opponent
-            Scissors -> beatsMapping.mapNotNull { if (it.value == Scissors) it.key else null }.single()
-        }.p()
+            Rock -> beatsMapping[opponent]!! // X
+            Paper -> opponent // Y
+            Scissors -> beatsMapping.firstNotNullOf { if (it.value == Scissors) it.key else null } // Z
+        }
 
         mapScores(opponent, adjustedPick)
     }
@@ -56,6 +56,6 @@ fun main() {
 
     mapInput(readInput("Day02")).let {
         do1(it).p1()
-            //do2(it).p2()
+        do2(it).p2()
     }
 }
