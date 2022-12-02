@@ -49,13 +49,33 @@ fun main() {
 
         mapScores(opponent, adjustedPick)
     }
+
+    // FTW, fast and understandable. Fck enterprisy code.
+    // @ClouddJR
+    fun cheat2(input: List<String>) = input.sumOf {
+        when (it) {
+            "A X" -> 3
+            "A Y" -> 4
+            "A Z" -> 8
+            "B X" -> 1
+            "B Y" -> 5
+            "B Z" -> 9
+            "C X" -> 2
+            "C Y" -> 6
+            "C Z" -> 7
+            else -> 0.toInt()
+        }
+    }
+
     mapInput(readInput("Day02_test")).let {
         do1(it).check { this == 15 }
         do2(it).check { this == 12 }
     }
 
-    mapInput(readInput("Day02")).let {
+    val raw = readInput("Day02")
+    mapInput(raw).let {
         do1(it).p1()
         do2(it).p2()
+        cheat2(raw).p2()
     }
 }
