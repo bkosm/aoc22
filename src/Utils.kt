@@ -19,3 +19,4 @@ fun <T> T.check(block: T.() -> Boolean) = let { check(it.block()) { "Actual: $it
 
 fun <T> T.p1() = println("Part 1: [$this]")
 fun <T> T.p2() = println("Part 2: [$this]")
+fun <T> T.p(): T = also { println("[$this]") }
