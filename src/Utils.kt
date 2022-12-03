@@ -1,5 +1,12 @@
+@file:Suppress("unused")
+
 import dev.forkhandles.result4k.Failure
+import dev.forkhandles.result4k.Result
 import dev.forkhandles.result4k.Success
+import dev.forkhandles.result4k.flatMap
+import dev.forkhandles.result4k.flatMapFailure
+import dev.forkhandles.result4k.map
+import dev.forkhandles.result4k.mapFailure
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -24,5 +31,11 @@ fun <T> T.p2() = println("Part 2: [$this]")
 fun <T> T.p(): T = also { println("p($this)") }
 fun <T, Y> T.p(selector: T.() -> Y): T = also { println("p { ${selector()} }") }
 
+
+// wrappers for Result4k to make them more versatile
 fun <T> T.left() = Success(this)
 fun <T> T.right() = Failure(this)
+fun <R, R1, L, L1> Result<L, R>.mapLeft(block: (L) -> L1) = map(block)
+fun <R, R1, L, L1> Result<L, R>.mapRight(block: (R) -> R1) = mapFailure(block)
+fun <R, R1, L, L1> Result<L, R>.flatMapLeft(block: (L) -> Result<R1, L1>) = flatMap(block)
+fun <R, R1, L, L1> Result<L, R>.flatMapRight(block: (R) -> Result<R1, L1>) = flatMapFailure(block)
