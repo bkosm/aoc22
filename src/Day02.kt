@@ -24,35 +24,23 @@ val codeMapping = mapOf(
 const val drawBonus = 3
 const val winBonus = 6
 
-fun main() {
-    fun mapInput(input: List<String>) = input.map {
+object Day02 : DailyRunner<Int, Int> {
+    private fun mapInput(input: List<String>) = input.map {
         val (first, second) = it.split(" ")
         codeMapping[first]!! to codeMapping[second]!!
     }
 
-    fun mapScores(opponent: Shape, mine: Shape) = when (opponent) {
+    private fun mapScores(opponent: Shape, mine: Shape) = when (opponent) {
         mine -> drawBonus + mine.score
         beatsMapping[mine] -> winBonus + mine.score
         else -> mine.score
     }
 
-    fun do1(arg: Collection<Pair<Shape, Shape>>) = arg.sumOf { (opponent, mine) ->
+    override fun do1(input: List<String>) = mapInput(input).sumOf { (opponent, mine) ->
         mapScores(opponent, mine)
     }
 
-    fun do2(arg: Collection<Pair<Shape, Shape>>) = arg.sumOf { (opponent, mine) ->
-        val adjustedPick = when (mine) {
-            Rock -> beatsMapping[opponent]!! // X
-            Paper -> opponent // Y
-            Scissors -> beatsMapping.firstNotNullOf { if (it.value == Scissors) it.key else null } // Z
-        }
-
-        mapScores(opponent, adjustedPick)
-    }
-
-    // FTW, fast and understandable. Fck enterprisy code.
-    // @ClouddJR
-    fun cheat2(input: List<String>) = input.sumOf {
+    override fun do2(input: List<String>) = input.sumOf {
         when (it) {
             "A X" -> 3
             "A Y" -> 4
@@ -66,16 +54,8 @@ fun main() {
             else -> 0.toInt()
         }
     }
+}
 
-    mapInput(readInput("Day02_test")).let {
-        do1(it).check { this == 15 }
-        do2(it).check { this == 12 }
-    }
-
-    val raw = readInput("Day02")
-    mapInput(raw).let {
-        do1(it).p1()
-        do2(it).p2()
-        cheat2(raw).p2()
-    }
+fun main() {
+    Day02.run()
 }
