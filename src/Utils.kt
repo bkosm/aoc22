@@ -1,3 +1,5 @@
+import dev.forkhandles.result4k.Failure
+import dev.forkhandles.result4k.Success
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -21,3 +23,6 @@ fun <T> T.p1() = println("Part 1: [$this]")
 fun <T> T.p2() = println("Part 2: [$this]")
 fun <T> T.p(): T = also { println("p($this)") }
 fun <T, Y> T.p(selector: T.() -> Y): T = also { println("p { ${selector()} }") }
+
+fun <T> T.left() = Success(this)
+fun <T> T.right() = Failure(this)
