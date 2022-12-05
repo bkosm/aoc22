@@ -1,6 +1,6 @@
-typealias Crate = Char
+typealias StackOfCrates = MutableList<Char>
 
-class Ship(private val stacks: List<MutableList<Crate>>) {
+class Ship(private val stacks: List<StackOfCrates>) {
     data class MoveCommand(
         val from: Int,
         val to: Int,
@@ -9,23 +9,23 @@ class Ship(private val stacks: List<MutableList<Crate>>) {
 
     fun move(command: MoveCommand, moveMultiple: Boolean = false) {
         if (moveMultiple) {
-            val multiple = stacks[command.from - 1].takeLast(command.amount).onEach { _ ->
-                stacks[command.from - 1].removeLastOrNull()
+            stacks[command.from].takeLast(command.amount).onEach { _ ->
+                stacks[command.from].removeLastOrNull()
+            }.let {
+                stacks[command.to].addAll(it)
             }
-            stacks[command.to - 1].addAll(multiple)
-
         } else {
             repeat(command.amount) {
-                stacks[command.from - 1].removeLastOrNull()?.let {
-                    stacks[command.to - 1].add(it)
+                stacks[command.from].removeLastOrNull()?.let {
+                    stacks[command.to].add(it)
                 }
             }
         }
     }
 
     @Suppress("unused")
-    fun log(cmd: Any? = null) {
-        println("=== Moved $cmd")
+    fun log(desc: Any? = null) {
+        println("=== Moved $desc")
         stacks.forEachIndexed { index, stack ->
             println("Stack ${index + 1}: ${stack.joinToString("")}")
         }
@@ -34,33 +34,31 @@ class Ship(private val stacks: List<MutableList<Crate>>) {
     fun tops() = stacks.map { it.lastOrNull() ?: " " }.joinToString("")
 }
 
-fun read(input: List<String>, columns: Int): Pair<List<MutableList<Crate>>, List<Ship.MoveCommand>> {
+fun read(input: List<String>, columns: Int): Pair<List<StackOfCrates>, List<Ship.MoveCommand>> {
     val setupLine = "^${(0 until columns).joinToString("\\ ") { "(\\ {3}|\\[[A-Z]\\])" }}\$".toRegex()
     val moveLine = "^move (\\d*) from (\\d*) to (\\d*)\$".toRegex()
 
     val commands = mutableListOf<Ship.MoveCommand>()
-    val stacks = mutableListOf<MutableList<Crate>>()
+    val stacks = mutableListOf<StackOfCrates>()
 
     input.forEach { raw ->
-        val line = raw.trim('|')
+        val line = raw.trim('|') // had to add it cause reading trims whitespace by itself
+
         setupLine.matchEntire(line)?.let { match ->
             val values = match.groupValues.drop(1)
-            if (stacks.isEmpty()) {
-                values.forEach {
-                    if (it.isBlank().not()) stacks.add(mutableListOf(it[1]))
-                    else stacks.add(mutableListOf())
-                }
-            } else {
-                values.forEachIndexed { i, e ->
-                    if (e.isBlank().not()) stacks[i].add(e[1])
-                }
+
+            if (stacks.isEmpty()) values.forEach {
+                if (it.isBlank().not()) stacks.add(mutableListOf(it[1]))
+                else stacks.add(mutableListOf())
+            } else values.forEachIndexed { i, e ->
+                if (e.isBlank().not()) stacks[i].add(e[1])
             }
         }
         moveLine.matchEntire(line)?.let {
             commands.add(
                 Ship.MoveCommand(
-                    from = it.groups[2]!!.value.toInt(),
-                    to = it.groups[3]!!.value.toInt(),
+                    from = it.groups[2]!!.value.toInt() - 1,
+                    to = it.groups[3]!!.value.toInt() - 1,
                     amount = it.groups[1]!!.value.toInt(),
                 )
             )
@@ -75,18 +73,14 @@ object Day05 : DailyRunner<String, String> {
     override fun do1(input: List<String>, isTest: Boolean) =
         read(input, if (isTest) 3 else 9).let { (stacks, commands) ->
             Ship(stacks).apply {
-                if (isTest) log()
-
-                commands.forEach { move(it); if (isTest) log(it) }
+                commands.forEach { move(it) }
             }.tops()
         }
 
     override fun do2(input: List<String>, isTest: Boolean) =
         read(input, if (isTest) 3 else 9).let { (stacks, commands) ->
             Ship(stacks).apply {
-                if (isTest) log("initial")
-
-                commands.forEach { move(it, moveMultiple = true); if (isTest) log(it) }
+                commands.forEach { move(it, moveMultiple = true) }
             }.tops()
         }
 }
