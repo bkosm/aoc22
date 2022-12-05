@@ -15,8 +15,8 @@ object Day01 : DailyRunner<Int, Int> {
         return map.values
     }
 
-    override fun do1(input: List<String>) = mapInput(input).max()
-    override fun do2(input: List<String>) = mapInput(input).sortedDescending().slice(0..2).sum()
+    override fun do1(input: List<String>, isTest: Boolean): Int = mapInput(input).max()
+    override fun do2(input: List<String>, isTest: Boolean): Int = mapInput(input).sortedDescending().slice(0..2).sum()
 }
 
 fun main() {

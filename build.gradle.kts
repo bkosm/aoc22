@@ -47,7 +47,7 @@ tasks {
 }
 
 dependencies {
-    implementation("com.github.bkosm:ktuple:1.2.0")
+    implementation("com.github.bkosm:ktuple:1.3.0")
     implementation(kotlin("reflect"))
     implementation(platform("dev.forkhandles:forkhandles-bom:2.3.0.0"))
     implementation("dev.forkhandles:result4k")

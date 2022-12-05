@@ -36,11 +36,12 @@ object Day02 : DailyRunner<Int, Int> {
         else -> mine.score
     }
 
-    override fun do1(input: List<String>) = mapInput(input).sumOf { (opponent, mine) ->
+    override fun do1(input: List<String>, isTest: Boolean): Int = mapInput(input).sumOf { (opponent, mine) ->
         mapScores(opponent, mine)
     }
 
-    override fun do2(input: List<String>) = input.sumOf {
+    override fun do2(input: List<String>, isTest: Boolean): Int = input.sumOf {
+        @Suppress("RemoveRedundantCallsOfConversionMethods")
         when (it) {
             "A X" -> 3
             "A Y" -> 4

@@ -13,7 +13,7 @@ object Day03 : DailyRunner<Int, Int> {
     private fun common(a: String, b: String) = a.toSet().intersect(b.toSet())
     private fun common(a: String, b: String, c: String) = common(a, b).joinToString("").let { common(it, c) }
 
-    override fun do1(input: List<String>) = input.sumOf { line ->
+    override fun do1(input: List<String>, isTest: Boolean): Int = input.sumOf { line ->
         val aSize = (line.length / 2.0).roundToInt()
         val bSize = line.length - aSize
 
@@ -23,7 +23,7 @@ object Day03 : DailyRunner<Int, Int> {
         common(a, b).sumOf { Prio.of(it).value }
     }
 
-    override fun do2(input: List<String>) = input.windowed(3, 3).map { elves ->
+    override fun do2(input: List<String>, isTest: Boolean): Int = input.windowed(3, 3).map { elves ->
         val (a, b, c) = elves
 
         common(a, b, c).run {
