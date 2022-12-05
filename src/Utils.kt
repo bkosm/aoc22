@@ -39,3 +39,9 @@ fun <R, R1, L, L1> Result<L, R>.mapLeft(block: (L) -> L1) = map(block)
 fun <R, R1, L, L1> Result<L, R>.mapRight(block: (R) -> R1) = mapFailure(block)
 fun <R, R1, L, L1> Result<L, R>.flatMapLeft(block: (L) -> Result<R1, L1>) = flatMap(block)
 fun <R, R1, L, L1> Result<L, R>.flatMapRight(block: (R) -> Result<R1, L1>) = flatMapFailure(block)
+
+@OptIn(ExperimentalStdlibApi::class)
+fun <T : Comparable<T>> OpenEndRange<T>.isContainedIn(other: OpenEndRange<T>) = when {
+    start >= other.start && endExclusive <= other.endExclusive -> true
+    else -> false
+}
