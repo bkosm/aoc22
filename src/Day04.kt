@@ -10,7 +10,6 @@ object Day04 : DailyRunner<Int, Int> {
         first to second
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     override fun do1(input: List<String>) = input
         .map { toRangePair(it) }
         .count { (first, second) ->
