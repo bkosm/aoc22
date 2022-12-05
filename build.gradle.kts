@@ -34,9 +34,9 @@ tasks {
                 }
             }
 
-            (File("$srcPrefix/Day01.kt") to File("$srcPrefix/Day$number.kt")).run {
+            (File("$srcPrefix/Template.kt") to File("$srcPrefix/Day$number.kt")).run {
                 if (second.exists().not()) {
-                    val content = first.readLines().map { it.replace("01", number) }
+                    val content = first.readLines().map { it.replace("Template", "Day$number") }
                     second.writeText(content.joinToString("\n"))
                 } else {
                     error("Code file already exists: $second")

@@ -15,10 +15,15 @@ sealed interface DailyRunner<RETURN1, RETURN2> {
         println("Test: <${do2(testInput)}>")
         println("Real: <${do2(input)}>")
     }
+
+    sealed interface Ignore
 }
 
 fun main() {
-    DailyRunner::class.sealedSubclasses.forEach {
-        it.objectInstance!!.run()
+    val ignoredClassNames = DailyRunner.Ignore::class.sealedSubclasses.map { it.simpleName!! }
+    DailyRunner::class.sealedSubclasses.forEach { daily ->
+        if (ignoredClassNames.contains(daily.simpleName).not()) {
+            daily.objectInstance!!.run()
+        }
     }
 }
