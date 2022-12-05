@@ -28,7 +28,7 @@ class Ship(private val stacks: List<MutableList<Crate>>) {
 
 fun read(input: List<String>, columns: Int): Pair<List<MutableList<Crate>>, List<Ship.MoveCommand>> {
     val setupLine = "^${(0 until columns).joinToString("\\ ") { "(\\ {3}|\\[[A-Z]\\])" }}\$".toRegex()
-    val moveLine = "^move (\\d) from (\\d) to (\\d)\$".toRegex()
+    val moveLine = "^move (\\d*) from (\\d*) to (\\d*)\$".toRegex()
 
     val commands = mutableListOf<Ship.MoveCommand>()
     val stacks = mutableListOf<MutableList<Crate>>()
@@ -67,7 +67,9 @@ object Day05 : DailyRunner<String, String> {
     override fun do1(input: List<String>, isTest: Boolean) =
         read(input, if (isTest) 3 else 9).let { (stacks, commands) ->
             Ship(stacks).apply {
-                commands.forEach { move(it) }
+                if (isTest) log()
+
+                commands.forEach { move(it); if (isTest) log(it) }
             }.tops()
         }
 
