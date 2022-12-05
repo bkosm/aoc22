@@ -7,16 +7,24 @@ class Ship(private val stacks: List<MutableList<Crate>>) {
         val amount: Int,
     )
 
-    fun move(command: MoveCommand) {
-        repeat(command.amount) {
-            stacks[command.from - 1].removeLastOrNull()?.let {
-                stacks[command.to - 1].add(it)
+    fun move(command: MoveCommand, moveMultiple: Boolean = false) {
+        if (moveMultiple) {
+            val multiple = stacks[command.from - 1].takeLast(command.amount).onEach { _ ->
+                stacks[command.from - 1].removeLastOrNull()
+            }
+            stacks[command.to - 1].addAll(multiple)
+
+        } else {
+            repeat(command.amount) {
+                stacks[command.from - 1].removeLastOrNull()?.let {
+                    stacks[command.to - 1].add(it)
+                }
             }
         }
     }
 
     @Suppress("unused")
-    fun log(cmd: MoveCommand? = null) {
+    fun log(cmd: Any? = null) {
         println("=== Moved $cmd")
         stacks.forEachIndexed { index, stack ->
             println("Stack ${index + 1}: ${stack.joinToString("")}")
@@ -73,7 +81,14 @@ object Day05 : DailyRunner<String, String> {
             }.tops()
         }
 
-    override fun do2(input: List<String>, isTest: Boolean): String = ""
+    override fun do2(input: List<String>, isTest: Boolean) =
+        read(input, if (isTest) 3 else 9).let { (stacks, commands) ->
+            Ship(stacks).apply {
+                if (isTest) log("initial")
+
+                commands.forEach { move(it, moveMultiple = true); if (isTest) log(it) }
+            }.tops()
+        }
 }
 
 fun main() {
