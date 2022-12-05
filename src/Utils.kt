@@ -45,3 +45,8 @@ fun <T : Comparable<T>> OpenEndRange<T>.isContainedIn(other: OpenEndRange<T>) = 
     start >= other.start && endExclusive <= other.endExclusive -> true
     else -> false
 }
+
+fun <T : Comparable<T>> ClosedRange<T>.containsAny(other: ClosedRange<T>) = when {
+    contains(other.start) || contains(other.endInclusive) -> true
+    else -> false
+}

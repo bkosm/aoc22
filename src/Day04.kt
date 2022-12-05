@@ -17,7 +17,11 @@ object Day04 : DailyRunner<Int, Int> {
             first.isContainedIn(second) or second.isContainedIn(first)
         }
 
-    override fun do2(input: List<String>) = 1
+    override fun do2(input: List<String>) = input
+        .map { toRangePair(it) }
+        .count { (first, second) ->
+            first.containsAny(second) or second.containsAny(first)
+        }
 }
 
 fun main() {
