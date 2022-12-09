@@ -25,6 +25,10 @@ fun toTreeMatrixFlat(input: List<String>): List<TreeRow> {
     return horizontal + vertical
 }
 
+fun toHeightMatrix(input: List<String>): List<List<Height>> = input.map { line ->
+    line.split("").filter(String::isNotBlank).map { it.toInt() }
+}
+
 object Day08 : DailyRunner<Int, Int> {
     override fun do1(input: List<String>, isTest: Boolean): Int {
         val rows = toTreeMatrixFlat(input)
@@ -45,7 +49,45 @@ object Day08 : DailyRunner<Int, Int> {
         }
     }
 
-    override fun do2(input: List<String>, isTest: Boolean): Int = 1
+    override fun do2(input: List<String>, isTest: Boolean): Int {
+        val scores = toHeightMatrix(input).run {
+            mapIndexed { j, row ->
+                row.mapIndexed { i, tree ->
+                    scenicScore(this, i, j, tree)
+                }
+            }
+        }
+
+        return scores.flatten().max()
+    }
+
+    private fun scenicScore(matrix: List<List<Height>>, x: Int, y: Int, height: Height): Int {
+        var left = 0
+        for (i in x - 1 downTo 0) {
+            left++
+            if (height <= matrix[i][y]) break
+        }
+
+        var right = 0
+        for (i in x + 1 until matrix.first().size) {
+            right++
+            if (height <= matrix[i][y]) break
+        }
+
+        var up = 0
+        for (j in y - 1 downTo 0) {
+            up++
+            if (height <= matrix[x][j]) break
+        }
+
+        var down = 0
+        for (j in y + 1 until matrix.size) {
+            down++
+            if (height <= matrix[x][j]) break
+        }
+
+        return left * right * up * down
+    }
 }
 
 fun main() {
